@@ -1,239 +1,889 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css\styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="icon" type="image/x-icon" href="./img/icono-de-cv.png">
-    <title>Sebastian Tevez | Portafolio</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sebastian Tevez | Analista de Sistemas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --bg:        #080c12;
+      --bg2:       #0d1320;
+      --surface:   #111827;
+      --card:      #131c2b;
+      --border:    #1a2740;
+      --accent:    #38bdf8;
+      --accent2:   #f97316;
+      --green:     #34d399;
+      --text:      #e2e8f0;
+      --muted:     #64748b;
+      --dim:       #94a3b8;
+      --radius:    12px;
+      --nav-h:     68px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* grid bg */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(56,189,248,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56,189,248,.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none; z-index: 0;
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+
+    /* ===== NAV ===== */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: var(--nav-h);
+      background: rgba(8,12,18,.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center;
+    }
+    .navbar .container {
+      display: flex; align-items: center; justify-content: space-between;
+      width: 100%;
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem; letter-spacing: .08em;
+      color: var(--accent); text-decoration: none;
+    }
+    .nav-logo span { color: var(--text); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--dim); text-decoration: none;
+      font-size: .88rem; font-weight: 500; letter-spacing: .03em;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    .nav-toggle {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; background: none; border: none; padding: 4px;
+    }
+    .nav-toggle span {
+      display: block; width: 24px; height: 2px;
+      background: var(--text); border-radius: 2px;
+      transition: all .3s;
+    }
+    .nav-mobile {
+      display: none; flex-direction: column;
+      position: fixed; top: var(--nav-h); left: 0; right: 0;
+      background: rgba(8,12,18,.97);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 1.5rem 2rem;
+      gap: 1.2rem; z-index: 99;
+    }
+    .nav-mobile.open { display: flex; }
+    .nav-mobile a {
+      color: var(--dim); text-decoration: none;
+      font-size: 1.1rem; font-weight: 500;
+      transition: color .2s;
+    }
+    .nav-mobile a:hover { color: var(--accent); }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding-top: var(--nav-h);
+      position: relative; overflow: hidden;
+    }
+    /* glow orbs */
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(56,189,248,.12) 0%, transparent 70%);
+      top: 50%; left: 50%; transform: translate(-50%,-50%);
+      pointer-events: none;
+    }
+    .hero-inner {
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 3rem; align-items: center;
+    }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: rgba(56,189,248,.08);
+      border: 1px solid rgba(56,189,248,.2);
+      color: var(--accent);
+      font-size: .78rem; font-weight: 500; letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: .35rem .8rem; border-radius: 999px;
+      margin-bottom: 1.2rem;
+      animation: fadeUp .6s ease both;
+    }
+    .hero-tag::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      line-height: .95; letter-spacing: .02em;
+      animation: fadeUp .6s ease .1s both;
+    }
+    .hero h1 .line2 { color: var(--accent); }
+    .hero-sub {
+      margin-top: 1.2rem; margin-bottom: 2rem;
+      color: var(--dim); font-size: 1.05rem; max-width: 460px;
+      line-height: 1.7;
+      animation: fadeUp .6s ease .2s both;
+    }
+    .hero-btns {
+      display: flex; flex-wrap: wrap; gap: .8rem;
+      animation: fadeUp .6s ease .3s both;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: var(--accent); color: #000;
+      font-weight: 700; font-size: .9rem;
+      padding: .75rem 1.6rem; border-radius: var(--radius);
+      text-decoration: none; transition: opacity .2s, transform .2s;
+    }
+    .btn-primary:hover { opacity: .85; transform: translateY(-1px); }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: .5rem;
+      border: 1px solid var(--border); color: var(--text);
+      font-weight: 500; font-size: .9rem;
+      padding: .75rem 1.6rem; border-radius: var(--radius);
+      text-decoration: none; transition: border-color .2s, transform .2s;
+    }
+    .btn-ghost:hover { border-color: var(--accent); transform: translateY(-1px); }
+
+    .hero-photo {
+      width: 220px; height: 220px; border-radius: 50%;
+      border: 3px solid var(--border);
+      object-fit: cover;
+      box-shadow: 0 0 60px rgba(56,189,248,.15);
+      animation: fadeUp .6s ease .15s both;
+      position: relative; z-index: 1;
+    }
+    .hero-photo-wrap {
+      position: relative;
+      animation: fadeUp .6s ease .15s both;
+    }
+    .hero-photo-wrap::before {
+      content: '';
+      position: absolute; inset: -8px;
+      border-radius: 50%;
+      border: 1px dashed rgba(56,189,248,.3);
+      animation: spin 20s linear infinite;
+    }
+
+    /* ===== SECTION SHARED ===== */
+    section { padding: 6rem 0; position: relative; z-index: 1; }
+    .section-label {
+      display: flex; align-items: center; gap: .8rem;
+      font-size: .75rem; font-weight: 700; letter-spacing: .15em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: .6rem;
+    }
+    .section-label::before {
+      content: ''; display: block;
+      width: 32px; height: 2px; background: var(--accent);
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      line-height: 1; letter-spacing: .02em;
+      margin-bottom: 3rem;
+    }
+
+    /* ===== ABOUT ===== */
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 3rem; align-items: start;
+    }
+    .about-text p {
+      color: var(--dim); line-height: 1.8; margin-bottom: 1rem;
+      font-size: .97rem;
+    }
+    .about-text p:last-child { margin-bottom: 0; }
+
+    .about-data {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.8rem;
+    }
+    .about-data h3 {
+      font-size: .75rem; font-weight: 700; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 1.2rem;
+    }
+    .data-list { list-style: none; display: flex; flex-direction: column; gap: .9rem; }
+    .data-list li {
+      display: flex; gap: .8rem; align-items: flex-start;
+      font-size: .9rem;
+    }
+    .data-list li i { color: var(--accent); margin-top: 3px; width: 16px; flex-shrink: 0; }
+    .data-list li span { color: var(--dim); }
+
+    /* ===== SKILLS ===== */
+    .skills-bg { background: var(--bg2); }
+    .skills-cols {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+    }
+    .skills-col h3 {
+      font-size: .75rem; font-weight: 700; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--muted);
+      margin-bottom: 1rem;
+    }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: .6rem; }
+    .skill-tag {
+      font-size: .82rem; font-weight: 500;
+      padding: .4rem .9rem; border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      transition: border-color .2s, color .2s;
+    }
+    .skill-tag:hover { border-color: var(--accent); color: var(--accent); }
+    .skill-tag.soft:hover { border-color: var(--accent2); color: var(--accent2); }
+
+    /* ===== PROJECTS ===== */
+    .projects-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .project-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color .25s, transform .25s;
+      display: flex; flex-direction: column;
+    }
+    .project-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+
+    .project-card-img {
+      width: 100%; height: 180px;
+      background: var(--bg2);
+      display: flex; align-items: center; justify-content: center;
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .project-card-img img {
+      max-height: 80px; max-width: 160px;
+      object-fit: contain; opacity: .9;
+    }
+    .project-card-img .placeholder-icon {
+      font-size: 3rem; color: var(--border);
+    }
+    .project-card-body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
+    .project-card-body h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: .5rem; }
+    .project-card-body p {
+      color: var(--dim); font-size: .87rem; line-height: 1.6;
+      flex: 1; margin-bottom: 1.2rem;
+    }
+    .project-tech { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1rem; }
+    .project-tech span {
+      font-size: .72rem; font-weight: 600; letter-spacing: .04em;
+      padding: .2rem .55rem; border-radius: 4px;
+      background: rgba(56,189,248,.08); border: 1px solid rgba(56,189,248,.2);
+      color: var(--accent);
+    }
+    .project-links { display: flex; gap: .6rem; }
+    .project-link {
+      display: inline-flex; align-items: center; gap: .4rem;
+      font-size: .82rem; font-weight: 600;
+      padding: .45rem 1rem; border-radius: 8px;
+      text-decoration: none; transition: opacity .2s;
+    }
+    .project-link.primary { background: var(--accent); color: #000; }
+    .project-link.secondary {
+      border: 1px solid var(--border); color: var(--dim);
+    }
+    .project-link:hover { opacity: .8; }
+    .project-link.disabled { opacity: .35; pointer-events: none; }
+    .wip-badge {
+      display: inline-block;
+      font-size: .65rem; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase;
+      background: rgba(249,115,22,.12); border: 1px solid rgba(249,115,22,.3);
+      color: var(--accent2);
+      padding: .15rem .5rem; border-radius: 4px;
+      margin-left: .5rem; vertical-align: middle;
+    }
+
+    /* ===== EDUCATION ===== */
+    .edu-bg { background: var(--bg2); }
+    .edu-timeline { display: flex; flex-direction: column; gap: 1.2rem; }
+    .edu-item {
+      display: grid; grid-template-columns: 120px 1fr;
+      gap: 1.5rem; align-items: start;
+    }
+    .edu-year {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem; letter-spacing: .05em;
+      color: var(--accent); padding-top: .2rem;
+      text-align: right;
+    }
+    .edu-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.3rem 1.5rem;
+      border-left: 3px solid var(--accent);
+    }
+    .edu-card h4 { font-size: 1rem; font-weight: 700; margin-bottom: .2rem; }
+    .edu-card .edu-inst { color: var(--accent); font-size: .83rem; font-weight: 600; margin-bottom: .5rem; }
+    .edu-card p { color: var(--dim); font-size: .87rem; line-height: 1.6; }
+
+    /* languages */
+    .lang-row {
+      display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2rem;
+    }
+    .lang-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: .9rem 1.3rem;
+      display: flex; align-items: center; gap: .7rem;
+    }
+    .lang-flag { font-size: 1.4rem; }
+    .lang-info h5 { font-size: .88rem; font-weight: 700; }
+    .lang-info span { font-size: .78rem; color: var(--muted); }
+
+    /* ===== CONTACT ===== */
+    .contact-grid {
+      display: grid; grid-template-columns: 1fr 1.2fr;
+      gap: 3rem; align-items: start;
+    }
+    .contact-info h3 {
+      font-size: 1rem; font-weight: 700; margin-bottom: .4rem;
+    }
+    .contact-info p { color: var(--dim); font-size: .9rem; line-height: 1.7; margin-bottom: 2rem; }
+    .contact-links { display: flex; flex-direction: column; gap: .8rem; }
+    .contact-link {
+      display: flex; align-items: center; gap: .8rem;
+      color: var(--dim); text-decoration: none;
+      font-size: .9rem; transition: color .2s;
+    }
+    .contact-link i { color: var(--accent); width: 18px; }
+    .contact-link:hover { color: var(--text); }
+    .social-row { display: flex; gap: .8rem; margin-top: 1.5rem; }
+    .social-btn {
+      width: 40px; height: 40px; border-radius: 8px;
+      border: 1px solid var(--border); background: var(--card);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--dim); text-decoration: none;
+      font-size: 1rem; transition: border-color .2s, color .2s;
+    }
+    .social-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: .4rem; }
+    .form-group label { font-size: .82rem; font-weight: 600; color: var(--dim); }
+    .form-group input,
+    .form-group textarea {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 8px; padding: .75rem 1rem;
+      color: var(--text); font-family: inherit; font-size: .9rem;
+      transition: border-color .2s; outline: none;
+      resize: vertical;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus { border-color: var(--accent); }
+    .form-group textarea { min-height: 130px; }
+    .btn-send {
+      display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+      background: var(--accent); color: #000;
+      font-weight: 700; font-size: .95rem;
+      padding: .85rem 1.8rem; border-radius: var(--radius);
+      border: none; cursor: pointer;
+      transition: opacity .2s, transform .2s;
+      align-self: flex-start;
+    }
+    .btn-send:hover { opacity: .85; transform: translateY(-1px); }
+
+    /* ===== FOOTER ===== */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 0; text-align: center;
+      color: var(--muted); font-size: .82rem;
+      position: relative; z-index: 1;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-toggle { display: flex; }
+
+      .hero-inner { grid-template-columns: 1fr; text-align: center; }
+      .hero-photo-wrap { justify-self: center; }
+      .hero-btns { justify-content: center; }
+      .hero-sub { margin-left: auto; margin-right: auto; }
+
+      .about-grid { grid-template-columns: 1fr; }
+      .skills-cols { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .edu-item { grid-template-columns: 1fr; }
+      .edu-year { text-align: left; font-size: .95rem; }
+    }
+  </style>
 </head>
 <body>
-    <!--Navegador-->
-    <header class="main-header">
-        <div class="container">
-            <div class="logo">
-                <h1>Sebastian Tevez</h1>
-                <span class="subtitle">Jr. Web Developer</span>
-            </div>
-            <nav id="nav" class="nav">
-                <ul>
-                    <li><a href="#inicio" onclick="seleccion()">Inicio</a></li>
-                    <li><a href="#info-personal" onclick="seleccion()">Sobre mí</a></li>
-                    <li><a href="#proyectos" onclick="seleccion()">Proyectos</a></li>
-                    <li><a href="#skill" onclick="seleccion()">Skills</a></li>
-                    <li><a href="#cv" onclick="seleccion()">Educación</a></li>
-                    <li><a href="#contacto" onclick="seleccion()">Contacto</a></li>
-                </ul>
-            </nav>
-            <div class="nav-responsive" onclick="mostrarMenu()">
-                <i class="fa-solid fa-bars"></i>
-            </div>
-        </div>
-    </header>
-    <!----Inicio---->
-    <section id="inicio" class="inicio">
-        <div class="caja-inicio">
-            <div class="caja-img">
-                <img src="img/perfil-cv.jpg" alt="Sebastian Tevez" >
-            </div>
-        <h2>Soy Sebastian Alejandro Tevez</h2>
-        <h3>Jr. Web Developer</h3>
-        </div>
-    </section>   
-    <!----Acerca de mi y datos personales---->
-    <section id="info-personal" class="info-personal">
-        <div class="caja-personal">
-            <h2>Acerca de mí</h2>
 
-            <div class="descripcion">
-                <p>
-                    Analista de Sistemas graduado con perfil Full-Stack Developer, apasionado por la tecnología y el desarrollo de software.
-                     Trabajo con JavaScript, React, Python, C# y PHP, y tengo experiencia en el desarrollo de aplicaciones web,
-                      manejo de bases de datos SQL y uso de herramientas ágiles como Jira.
-                </p>
-                <p>
-                    A través de proyectos académicos y personales he participado en el diseño y construcción de soluciones completas,
-                     desde el análisis funcional hasta la implementación, aplicando metodologías ágiles y buenas prácticas de desarrollo. 
-                     Me destaco por mi capacidad para aprender rápido, trabajar en equipo y resolver problemas de forma práctica.
-                </p>
-                <p>
-                    Me encuentro en constante formación, enfocado en seguir creciendo profesionalmente como desarrollador y 
-                    sumar valor en equipos de tecnología con impacto real.
-                </p>
-            </div>
+  <!-- NAV -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="#inicio" class="nav-logo">ST<span>.</span></a>
+      <ul class="nav-links">
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#sobre-mi">Sobre mí</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#proyectos">Proyectos</a></li>
+        <li><a href="#educacion">Educación</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+      <button class="nav-toggle" onclick="toggleMenu()" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="nav-mobile" id="navMobile">
+    <a href="#inicio" onclick="closeMenu()">Inicio</a>
+    <a href="#sobre-mi" onclick="closeMenu()">Sobre mí</a>
+    <a href="#skills" onclick="closeMenu()">Skills</a>
+    <a href="#proyectos" onclick="closeMenu()">Proyectos</a>
+    <a href="#educacion" onclick="closeMenu()">Educación</a>
+    <a href="#contacto" onclick="closeMenu()">Contacto</a>
+  </div>
 
-            <div class="datos">
-                <h3>Datos Personales</h3>
-                <ul>
-                    <li><strong>Teléfono:</strong> (11) 2386-8868</li>
-                    <li><strong>Dirección:</strong> C.A.B.A, Argentina</li>
-                    <li><strong>Email:</strong> sebastevez91@gmail.com</li>
-                    <li><strong>Cargo:</strong> Web Developer</li>
-                </ul>
-            </div>
-        </div>
-    </section>
-    <!-----Skills-----> 
-    <section class="skill" id="skills">
-        <div class="caja-skill">   
-            <h2>Skills</h2>
-
-            <div class="fila">
-
-                <div class="col">
-                    <h3>Technical Skills</h3>
-                    <div class="skill-grid">
-                        <span class="skill-btn">Desarrollo Full Stack web (HTML, CSS, JAVASCRIPT, REACT)</span>
-                        <span class="skill-btn">Programación (Java, Python, PHP, C#)</span>
-                        <span class="skill-btn">Bases de datos (SQL Server, modelado de datos)</span>
-                        <span class="skill-btn">Control de versiones (Git, GitHub)</span>
-                        <span class="skill-btn">Metodologías ágiles (Scrum)</span>
-                        <span class="skill-btn">Analisis y diseño de sistemas</span>
-                        <span class="skill-btn">testing y depuración de software</span>
-                        <span class="skill-btn">Uso de herramientas de gestón (Jira, Miro)</span>
-                        <span class="skill-btn">Desarrollo mobile (Android Studio)</span>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <h3>Professional Skills</h3>
-                    <div class="skill-grid">
-                        <span class="skill-btn">Trabajo en equipo</span>
-                        <span class="skill-btn">Comunicación</span>
-                        <span class="skill-btn">Dedicación</span>
-                        <span class="skill-btn">Creatividad</span>
-                        <span class="skill-btn">Pensamiento crítico</span>
-                        <span class="skill-btn">Adaptabilidad al cambio</span>
-                        <span class="skill-btn">Gestión de tiempo</span>
-                        <span class="skill-btn">Resolución de problemas</span>
-                        <span class="skill-btn">Aprendizaje continuo</span>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-    <!---Educación-->
-    <section id="cv" class="cv"> 
-        <div class="caja-cv">
-            <h2>Educación</h2>
-            <div class="fila">
-                <div class="col">
-                    <h3>Educación Académica</h3>
-                    <div class="item der">
-                        <h4>Ticmas</h4>
-                        <span class="curso">21/8/2023 - Procesamientos de datos con Python</span>
-                        <p class="contenido">Conocimientos en Python, libreria panda, Machine learning con python.</p>
-                        <p>Modalidad online</p>
-                        <span class="curso">15/05/2023 Curso primeros pasos de front-end</span>
-                        <p class="contenido">Conocimientos en Html, CSS, JavaScript</p>
-                        <p>Modalidad online</p>
-                        <span class="curso">13/10/2023 - Curso Fundamentos de Programación</span>
-                        <p class="contenido">Conocimientos en Python, Ruby, JavaScript</p>
-                        <p>Modalidad online</p>
-                    </div>
-                    <div class="item der">
-                        <h4>Instituto inmaculada concepcion (ISTIC)</h4>
-                        <span class="curso">13/03/2023 - 09/12/2025 Técnicatura en Analisis de Sistemas </span>
-                        <span class="contenido">Concepto, herramientas actuales como Inteligencia Artificial, Robótica, Realidad Virtual,
-                                    programación avanzada y análisis de datos.</span>
-                        <p>Modalidad Presencial</p>
-                    </div>
-                    <div class="item der">
-                        <h4>Idiomas</h4>
-                        <ul id="idioma">
-                            <li>Español: nivel nativo</li>
-                            <li>Inglés: nivel principiante (A1)</li>
-                            <li>Italiano: nivel basico (A1)</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- NUEVA SECCIÓN DE PROYECTOS -->
-    <section id="proyectos" class="proyectos">
-        <div class="container">
-            <h2>Proyectos Destacados</h2>
-            <div class="proyectos-grid">
-                <div class="proyecto-card">
-                    <img src="img/logo.png" alt="Proyecto 1">
-                    <h3>AutoPartes Razor</h3>
-                    <p>Sistema completo de gestión para tiendas de repuestos automotrices.
-                        Incluye gestión de inventario, órdenes de compra y venta, sistema de reclamos,
-                         notificaciones, cupones de descuento y más.</p>
-                    <a href="https://sebastevez91.github.io/ProjectPIII/" class="btn-proyecto" target="_blank">Ver más</a>
-                </div>
-                <div class="proyecto-card">
-                    <img src="img/logo-retax.png" alt="Proyecto 2">
-                    <h3>Retax</h3>
-                    <p>Aplicacón movil para traslados de pasajeros, desarrollada con tecnologias como React Native, SqlServer, javascript, ect...</p>
-                    <a href="#" class="btn-proyecto" target="_blank">Ver más</a>
-                </div>
-                <div class="proyecto-card">
-                    <img src="img/logo-taller.png" alt="Proyecto 2">
-                    <h3>Taller System</h3>
-                    <p>Proyecto de aplicación web, objetivo control y gestion de mantenimiento de vehiculos, enfocada en la prediccion con IA</p>
-                    <a href="#" class="btn-proyecto" target="_blank">Ver más</a>
-                </div>
-                <!-- Agrega más proyectos aquí -->
-            </div>
-        </div>
-    </section>
-    <!------Contacto------>
-    <section id="contacto" class="contacto">
-        <div class="caja-contacto">
-            <h2>Contactos</h2>
-                <div class="fila">
-                    <div class="col">
-                        <form action="https://formsubmit.co/08ce1158899feed18872850db8087192" method="POST">
-                            <label>Nombre </label>
-                            <input type="text" name="nombre" placeholder="Ingrese su Nombre" required><br>
-                            <label>Apellido </label>
-                            <input type="text" name="apellido" placeholder="Ingrese su Apellido" required><br>
-                            <label>E-mail </label>
-                            <input type="email" name="Email" placeholder="Ingrese su E-mail"><br>
-                            <label>Comentario </label>
-                            <textarea name="comentario" id="comentario" cols="30" rows="10" placeholder="Deje su mensaje" ></textarea><br>
-                            <button>Enviar<i class="fa-solid fa-file-import"></i>
-                            <span class="overlay"></span></button>
-                            <input type="hidden" name="_next" value="https://sebastevez91.github.io/miportafolio/" />
-                            <input type="hidden" name="_captcha" value="false" />
-                        </form>
-                    </div>
-                    <div class="col">
-                        <div class="info">
-                            <ul>
-                                <li><i class="fa-solid fa-envelope"></i>
-                                    sebastevez91@gmail.com </li>
-                                <li><i class="fa-solid fa-phone"></i>
-                                    (11) 23868868 </li>
-                                <li><i class="fa-solid fa-location-dot"></i>
-                                    Grl Manuel N.Savio 215, C.A de Buenos Aires, Argentina </li>
-                             </ul>
-                        </div>     
-                    </div>
-             </div>
-        </div>
-    </section>     
-    <script src="js/main.js"></script>
-    <footer>
-        <div class="container">
-            <a href="#inicio" class="arriba">
-                <i class="fa-solid fa-arrow-up"></i>
+  <!-- HERO -->
+  <section id="inicio" class="hero">
+    <div class="container">
+      <div class="hero-inner">
+        <div class="hero-content">
+          <div class="hero-tag">Disponible para trabajar</div>
+          <h1>
+            Sebastian<br>
+            <span class="line2">Tevez</span>
+          </h1>
+          <p class="hero-sub">
+            Analista de Sistemas & Full Stack Developer. Apasionado por construir soluciones reales, desde el análisis funcional hasta la implementación.
+          </p>
+          <div class="hero-btns">
+            <a href="#proyectos" class="btn-primary">
+              <i class="fa-solid fa-code"></i> Ver proyectos
             </a>
-            <h4>© 2025 Sebastian Tevez. Todos los derechos reservados.</h4>
-            <div class="footer-social">
-                <a href="https://www.linkedin.com/in/sebastian-tevez-7b702322b" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
-                <a href="https://github.com/sebastevez91" target="_blank"><i class="fa-brands fa-github"></i></a>
-                <a href="https://www.instagram.com/sebas_tvz07/" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-            </div>
+            <a href="#contacto" class="btn-ghost">
+              <i class="fa-solid fa-paper-plane"></i> Contactame
+            </a>
+          </div>
         </div>
-    </footer>
+        <div class="hero-photo-wrap">
+          <img src="img/perfil-cv.jpg" alt="Sebastian Tevez" class="hero-photo"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+          <div style="display:none; width:220px; height:220px; border-radius:50%; background:var(--card); border:3px solid var(--border); align-items:center; justify-content:center; font-size:4rem; color:var(--border);">
+            <i class="fa-solid fa-user"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOBRE MÍ -->
+  <section id="sobre-mi">
+    <div class="container">
+      <p class="section-label">01 — Sobre mí</p>
+      <h2 class="section-title">Quién soy</h2>
+      <div class="about-grid reveal">
+        <div class="about-text">
+          <p>
+            Analista de Sistemas graduado con perfil Full Stack Developer, apasionado por la tecnología y el desarrollo de software. Trabajo con JavaScript, React, Python, C# y PHP, con experiencia en desarrollo de aplicaciones web y manejo de bases de datos SQL.
+          </p>
+          <p>
+            A través de proyectos académicos y personales participé en el diseño y construcción de soluciones completas — desde el análisis funcional hasta la implementación — aplicando metodologías ágiles y buenas prácticas de desarrollo.
+          </p>
+          <p>
+            Me destaco por mi capacidad para aprender rápido, trabajar en equipo y resolver problemas de forma práctica. Estoy en constante formación, enfocado en seguir creciendo profesionalmente y sumar valor en equipos de tecnología con impacto real.
+          </p>
+        </div>
+        <div class="about-data">
+          <h3>// Datos de contacto</h3>
+          <ul class="data-list">
+            <li>
+              <i class="fa-solid fa-envelope"></i>
+              <span>sebastevez91@gmail.com</span>
+            </li>
+            <li>
+              <i class="fa-solid fa-location-dot"></i>
+              <span>C.A.B.A., Buenos Aires, Argentina</span>
+            </li>
+            <li>
+              <i class="fa-brands fa-linkedin"></i>
+              <span>
+                <a href="https://www.linkedin.com/in/sebastian-tevez-7b702322b" target="_blank"
+                   style="color:var(--accent); text-decoration:none;">
+                  linkedin.com/in/sebastian-tevez
+                </a>
+              </span>
+            </li>
+            <li>
+              <i class="fa-brands fa-github"></i>
+              <span>
+                <a href="https://github.com/sebastevez91" target="_blank"
+                   style="color:var(--accent); text-decoration:none;">
+                  github.com/sebastevez91
+                </a>
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" class="skills-bg">
+    <div class="container">
+      <p class="section-label">02 — Habilidades</p>
+      <h2 class="section-title">Skills</h2>
+      <div class="skills-cols reveal">
+        <div class="skills-col">
+          <h3>// Technical Skills</h3>
+          <div class="skill-tags">
+            <span class="skill-tag">HTML5 / CSS3</span>
+            <span class="skill-tag">JavaScript</span>
+            <span class="skill-tag">React</span>
+            <span class="skill-tag">React Native</span>
+            <span class="skill-tag">Node.js</span>
+            <span class="skill-tag">Python</span>
+            <span class="skill-tag">C#</span>
+            <span class="skill-tag">PHP</span>
+            <span class="skill-tag">Java</span>
+            <span class="skill-tag">SQL Server</span>
+            <span class="skill-tag">Git / GitHub</span>
+            <span class="skill-tag">Scrum / Agile</span>
+            <span class="skill-tag">Análisis de Sistemas</span>
+            <span class="skill-tag">Android Studio</span>
+            <span class="skill-tag">Jira / Miro</span>
+          </div>
+        </div>
+        <div class="skills-col">
+          <h3>// Soft Skills</h3>
+          <div class="skill-tags">
+            <span class="skill-tag soft">Trabajo en equipo</span>
+            <span class="skill-tag soft">Comunicación</span>
+            <span class="skill-tag soft">Pensamiento crítico</span>
+            <span class="skill-tag soft">Adaptabilidad</span>
+            <span class="skill-tag soft">Resolución de problemas</span>
+            <span class="skill-tag soft">Gestión del tiempo</span>
+            <span class="skill-tag soft">Creatividad</span>
+            <span class="skill-tag soft">Aprendizaje continuo</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROYECTOS -->
+  <section id="proyectos">
+    <div class="container">
+      <p class="section-label">03 — Trabajo</p>
+      <h2 class="section-title">Proyectos destacados</h2>
+      <div class="projects-grid reveal">
+
+        <!-- AutoPartes Razor -->
+        <div class="project-card">
+          <div class="project-card-img">
+            <img src="img/logo.png" alt="AutoPartes Razor"
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+            <i class="fa-solid fa-car placeholder-icon" style="display:none"></i>
+          </div>
+          <div class="project-card-body">
+            <h3>AutoPartes Razor</h3>
+            <p>Sistema completo de gestión para tiendas de repuestos automotrices. Incluye inventario, órdenes de compra/venta, sistema de reclamos, notificaciones y cupones de descuento.</p>
+            <div class="project-tech">
+              <span>JavaScript</span>
+              <span>HTML/CSS</span>
+              <span>SQL Server</span>
+            </div>
+            <div class="project-links">
+              <a href="https://sebastevez91.github.io/ProjectPIII/" class="project-link primary" target="_blank">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Ver demo
+              </a>
+              <a href="https://github.com/sebastevez91/ProjectPIII" class="project-link secondary" target="_blank">
+                <i class="fa-brands fa-github"></i> Código
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ETax / Retax -->
+        <div class="project-card">
+          <div class="project-card-img">
+            <img src="img/logo-retax.png" alt="ETax"
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+            <i class="fa-solid fa-taxi placeholder-icon" style="display:none"></i>
+          </div>
+          <div class="project-card-body">
+            <h3>ETax <span class="wip-badge">En desarrollo</span></h3>
+            <p>Aplicación móvil estilo Uber para traslados de pasajeros. Desarrollada con React Native y Expo, con navegación entre pantallas, splash screen y sistema de reservas.</p>
+            <div class="project-tech">
+              <span>React Native</span>
+              <span>Expo</span>
+              <span>JavaScript</span>
+              <span>Node.js</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/sebastevez91" class="project-link secondary" target="_blank">
+                <i class="fa-brands fa-github"></i> GitHub
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Taller System -->
+        <div class="project-card">
+          <div class="project-card-img">
+            <img src="img/logo-taller.png" alt="Taller System"
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+            <i class="fa-solid fa-wrench placeholder-icon" style="display:none"></i>
+          </div>
+          <div class="project-card-body">
+            <h3>Taller System <span class="wip-badge">En desarrollo</span></h3>
+            <p>Aplicación web para control y gestión de mantenimiento de vehículos, con predicción inteligente usando IA para anticipar fallas y programar servicios.</p>
+            <div class="project-tech">
+              <span>Web App</span>
+              <span>IA</span>
+              <span>SQL</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/sebastevez91" class="project-link secondary" target="_blank">
+                <i class="fa-brands fa-github"></i> GitHub
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCACIÓN -->
+  <section id="educacion" class="edu-bg">
+    <div class="container">
+      <p class="section-label">04 — Formación</p>
+      <h2 class="section-title">Educación</h2>
+      <div class="edu-timeline reveal">
+
+        <div class="edu-item">
+          <div class="edu-year">2023 – 2025</div>
+          <div class="edu-card">
+            <h4>Tecnicatura en Análisis de Sistemas</h4>
+            <div class="edu-inst">Instituto Inmaculada Concepción (ISTIC)</div>
+            <p>Formación en programación avanzada, análisis y diseño de sistemas, bases de datos, inteligencia artificial, robótica y realidad virtual. Modalidad presencial.</p>
+          </div>
+        </div>
+
+        <div class="edu-item">
+          <div class="edu-year">2023</div>
+          <div class="edu-card">
+            <h4>Procesamiento de Datos con Python</h4>
+            <div class="edu-inst">Ticmas · Online</div>
+            <p>Python, librería Pandas y Machine Learning aplicado a análisis de datos.</p>
+          </div>
+        </div>
+
+        <div class="edu-item">
+          <div class="edu-year">2023</div>
+          <div class="edu-card">
+            <h4>Fundamentos de Programación</h4>
+            <div class="edu-inst">Ticmas · Online</div>
+            <p>Python, Ruby y JavaScript — lógica y estructuras fundamentales de programación.</p>
+          </div>
+        </div>
+
+        <div class="edu-item">
+          <div class="edu-year">2023</div>
+          <div class="edu-card">
+            <h4>Primeros Pasos de Front-End</h4>
+            <div class="edu-inst">Ticmas · Online</div>
+            <p>HTML, CSS y JavaScript. Fundamentos del desarrollo frontend y maquetado web.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Idiomas -->
+      <div class="lang-row reveal">
+        <div class="lang-card">
+          <div class="lang-flag">🇦🇷</div>
+          <div class="lang-info">
+            <h5>Español</h5>
+            <span>Nativo</span>
+          </div>
+        </div>
+        <div class="lang-card">
+          <div class="lang-flag">🇬🇧</div>
+          <div class="lang-info">
+            <h5>Inglés</h5>
+            <span>Básico (A1) — En progreso</span>
+          </div>
+        </div>
+        <div class="lang-card">
+          <div class="lang-flag">🇮🇹</div>
+          <div class="lang-info">
+            <h5>Italiano</h5>
+            <span>Básico (A1)</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section id="contacto">
+    <div class="container">
+      <p class="section-label">05 — Contacto</p>
+      <h2 class="section-title">Hablemos</h2>
+      <div class="contact-grid reveal">
+
+        <div class="contact-info">
+          <h3>¿Tenés un proyecto o una oportunidad?</h3>
+          <p>Estoy buscando mi primer empleo IT y abierto a propuestas de trabajo, pasantías o colaboraciones. No dudes en escribirme.</p>
+          <div class="contact-links">
+            <a href="mailto:sebastevez91@gmail.com" class="contact-link">
+              <i class="fa-solid fa-envelope"></i>
+              sebastevez91@gmail.com
+            </a>
+            <a href="https://www.linkedin.com/in/sebastian-tevez-7b702322b" target="_blank" class="contact-link">
+              <i class="fa-brands fa-linkedin"></i>
+              linkedin.com/in/sebastian-tevez
+            </a>
+            <a href="https://github.com/sebastevez91" target="_blank" class="contact-link">
+              <i class="fa-brands fa-github"></i>
+              github.com/sebastevez91
+            </a>
+          </div>
+          <div class="social-row">
+            <a href="https://www.linkedin.com/in/sebastian-tevez-7b702322b" target="_blank" class="social-btn">
+              <i class="fa-brands fa-linkedin"></i>
+            </a>
+            <a href="https://github.com/sebastevez91" target="_blank" class="social-btn">
+              <i class="fa-brands fa-github"></i>
+            </a>
+            <a href="https://www.instagram.com/sebas_tvz07/" target="_blank" class="social-btn">
+              <i class="fa-brands fa-instagram"></i>
+            </a>
+          </div>
+        </div>
+
+        <form class="contact-form"
+              action="https://formsubmit.co/08ce1158899feed18872850db8087192"
+              method="POST">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_next" value="https://sebastevez91.github.io/mi_portafolio/">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="nombre">Nombre</label>
+              <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
+            </div>
+            <div class="form-group">
+              <label for="apellido">Apellido</label>
+              <input type="text" id="apellido" name="apellido" placeholder="Tu apellido" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="Email" placeholder="tu@email.com" required>
+          </div>
+          <div class="form-group">
+            <label for="mensaje">Mensaje</label>
+            <textarea id="mensaje" name="comentario" placeholder="Contame de qué se trata..." required></textarea>
+          </div>
+          <button type="submit" class="btn-send">
+            <i class="fa-solid fa-paper-plane"></i> Enviar mensaje
+          </button>
+        </form>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <p>© 2025 <strong>Sebastian Tevez</strong> · Hecho con HTML, CSS & JS ·
+        <a href="https://github.com/sebastevez91/mi_portafolio" target="_blank">Ver código</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu
+    function toggleMenu() {
+      document.getElementById('navMobile').classList.toggle('open');
+    }
+    function closeMenu() {
+      document.getElementById('navMobile').classList.remove('open');
+    }
+
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    revealEls.forEach(el => observer.observe(el));
+
+    // Active nav link on scroll
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 100) current = s.getAttribute('id');
+      });
+      navLinks.forEach(a => {
+        a.style.color = a.getAttribute('href') === '#' + current
+          ? 'var(--accent)' : '';
+      });
+    });
+  </script>
+
 </body>
 </html>
